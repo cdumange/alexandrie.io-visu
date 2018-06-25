@@ -12,7 +12,7 @@ Vue.use(BootstrapVue);
 Vue.component('typeMessage', typeMessage);
 Vue.component('message', message);
 Vue.component('messageDetail', messageDetail);
-Vue.component('filtre', filtre);
+Vue.component('filtreCHCN', filtre);
 Vue.component('OrigineMessage', OrigineMessage);
 Vue.use(VuePaginate);
 

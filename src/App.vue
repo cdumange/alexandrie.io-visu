@@ -25,12 +25,14 @@
       </b-nav>
     </b-col>
     <b-col id="listMess" cols="9">
-      <filtre
+      <filtreCHCN
         :dateDebut="filtre.dateDebut"
         :dateFin="filtre.dateFin"
         :selectedPriority="filtre.importance"
-        :listPrio="listPriority" >
-      </filtre>
+        :listPrio="listPriority"
+        :searchField="filtre.searchText"
+        @onclick="changedSearch" >
+      </filtreCHCN>
       <paginate name="vlistMessage" :list="listMessage" :per="6">
         <message
           v-for="mess in paginated('vlistMessage')"
@@ -89,7 +91,8 @@
           selectedPriority: "",
           dateDebut : new Date(),
           dateFin : null,
-          importance : ""
+          importance : "",
+          searchText : ""
         }
       }
     },
@@ -143,8 +146,16 @@
           f.priority = this.filtre.selectedPriority;
         }
 
+        let searchDate = new Date();
+        searchDate.setUTCHours(searchDate.getUTCHours() -24);
+
+        f.dateD = searchDate;
+
         console.log("filtre :");
         console.log(JSON.stringify(f));
+
+        console.log('searchText : ');
+        console.log (this.filtre.searchText);
 
         this.socket.emit('requestcache',f);
       },
@@ -161,7 +172,13 @@
           this.listPriority.push(data.priority);
         }
 
-        this.listMessage.push(data);
+        if (this.filtre.searchText != undefined && this.filtre.searchText!= ""){
+          console.log(this.filtre.searchText);
+          const text = JSON.stringify(data.message);
+          if (text.indexOf(this.filtre.searchText) >= 0)        
+            this.listMessage.push(data);
+        }else
+          this.listMessage.push(data);
       },
       changeMessageSelected : function(mess){
         this.selectedMessage = mess;
@@ -173,6 +190,10 @@
       },
       closeMsg : function(){
         this.selectedMessage = null;
+      },
+      changedSearch : function (val) {
+        this.filtre.searchText = val;
+        this.changeTypeSelected(this.filtre.selectedType);
       }
     }
   }
@@ -212,7 +233,7 @@
   }
 
   #listType, #listMess{
-    background-color: #00;
+    
     color:#cccccc;
   }
 

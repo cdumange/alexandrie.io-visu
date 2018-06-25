@@ -9,10 +9,8 @@
         <message class="hMessage" :message="message"></message>
         <b-row class="detail">
           <div v-html="formatedMessage()" class="fullMessage" ></div>
-          <div v-html="message.message.stackMessage" class="stackMessage"></div>
         </b-row>
       </div>
-    </div>
     </b-modal>
 </template>
 <script>
@@ -29,14 +27,38 @@
         this.$refs.modalDetailMessage.show();
       },
       formatedMessage (){
-        if(this.message.message.message != undefined)
-          return this.message.message.message;
-        else {
-          return this.message.message;
-        }
+        return getValuesAsString(this.message.message);
       }
     }
   }
+
+  const getValuesAsString = (obj) => {
+    try{
+      //If type = string, try to parse
+      if (typeof(obj) == 'string'){
+          obj = JSON.parse(obj);
+      }
+    }catch(e){
+      //nothing to do, just not JSON
+    }
+    let retour = '';
+    //if string, no need
+    if (typeof(obj) == "string") return obj;
+
+    const values = Object.values(obj);
+    //parcourt les clés
+    Object.keys(obj).forEach((key, pos) => {
+      //adding the header
+      retour += "<span style='font-weight:bold;text-decoration:underlined;'>" + key + " : </span>";
+      retour += "<br/>";
+      let val = values[pos];
+      
+      retour += "<span style='margin-left:5px;'>" + (typeof(val) == "object" ? getValuesAsString(val) : val) + "</span>";
+      retour += "<br/>";
+    });
+    retour += "<br/>";
+    return retour;
+  };
 </script>
 <style>
   .detail, .fullMessage, .stackMessage{

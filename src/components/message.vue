@@ -4,7 +4,7 @@
         v-if="message != undefined">
     <b-row>
       <b-col cols="8"> Origine : {{message.message.origine}} </b-col>
-      <b-col cols="4"> Date :  {{message.date}}</b-col>
+      <b-col cols="4"> Date :  {{formatDate}}</b-col>
       <b-col cols="2"> Nb itération : {{message.counter}}</b-col>
       <b-col offset="6" cols="4"> Priorité : {{message.priority}}</b-col>
     </b-row>
@@ -33,14 +33,22 @@
         if(this.message.message.message != undefined)
           ret=  this.message.message.message;
         else {
-          ret =  this.message.message;
+          if (this.message.message != undefined)
+            ret =  this.message.message;
+          else ret = this.message;
         }
 
-        console.log(typeof ret);
-        console.log(JSON.stringify(this.message));
+        if (ret != undefined && typeof ret != 'string')
+          ret = JSON.stringify(ret);
         return ret;
       },
-
+      formatDate(){
+        const param = this.message.date;
+        if (param != undefined && param != ""){
+          const d = new Date(param);
+          return d.toLocaleDateString() + " " + d.toLocaleTimeString();
+        }
+      },
       getPriorityStyleClass: function(){
         var priority = this.message.priority.toString().toLowerCase();
         var className = 'light';
@@ -59,10 +67,4 @@
   }
 </script>
 <style>
-
-
-
-
-
-
 </style>
