@@ -1,3 +1,8 @@
 {
-  "addressio" : "ws://srv-webdev:65123"
+  "addressio" : "ws://srv-webdev:65123",
+  "addressSearch" : [{
+    "search" : "(text~\"{searchText}\")",
+    "url" : "http://srv-devtools/confluence/rest/api/content/search?cql="
+
+  }]
 }

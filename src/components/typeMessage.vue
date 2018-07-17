@@ -12,7 +12,7 @@
     name:"typeMessage",
     props : {
       typeMessage : {type : Object, required : true},
-      selectedType : {type : String, required : false}
+      selectedType : {type : String, required : false},
     },
     methods : {
       isSelected(){
