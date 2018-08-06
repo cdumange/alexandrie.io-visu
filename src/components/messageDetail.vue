@@ -16,9 +16,7 @@
         </ul>
         
       </b-container>
-      <b-container class="detail">
-        <div v-html="formatedMessage()" class="fullMessage" ></div>
-      </b-container>
+      <iframe id="frameContent" v-bind:srcdoc="formatedMessage()" class="fullMessage" ></iframe>
     </b-container>
   </b-modal>
 </template>
@@ -105,7 +103,7 @@ const getRequest = (search, val) => {
       search.replace(/{searchText}/g, w)
     );
 
-    return listURL.join("%20or%20");
+    return listURL.join("%20and%20");
   }else return null;
 
   
@@ -183,12 +181,18 @@ const getValuesAsString = obj => {
 }
 
 .fullMessage {
-  max-height: 40%;
+  height: 50vh;
+  width:100%;
+  border-width: 0;
 }
+
+
 .stackMessage {
   max-height: 40%;
 }
 #divURLs ul {
   padding-left: 45px;
 }
+
+
 </style>
